@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import './App.css'
 
 type CatchItemProps = {
@@ -7,23 +8,23 @@ type CatchItemProps = {
 
 function App() {
 
-  const catches = [
+  const [catches, setCatches] = useState([
     {
       fish: "Horse Mackerel",
-      length: 18,
+      length: 16,
       id: 1
     },
     {
       fish: "Painted Comber",
-      length: 16,
+      length: 18,
       id: 2
     },
     {
-      fish: "Gilthead Seabream",
+      fish: "Guilted Seabream",
       length: 32,
       id: 3
     }
-  ];
+  ]);
 
   return (
       <section id="center">
@@ -39,6 +40,16 @@ function App() {
               )
             })
           }
+          <button onClick={() => {
+            setCatches([
+              ...catches,
+              {
+                id: Date.now(),
+                fish: "Painted Comber",
+                length: 18
+              }
+            ])
+          }}>Add Catch</button>
       </section>
   )
 }
