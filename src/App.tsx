@@ -26,6 +26,9 @@ function App() {
     }
   ]);
 
+  const [fish, setFish] = useState("");
+  const [length, setLength] = useState("");
+
   return (
       <section id="center">
         <h1>Catch Log</h1>
@@ -40,15 +43,34 @@ function App() {
               )
             })
           }
+
+          <input 
+            value={fish}
+            onChange={(event) => setFish(event.target.value)}
+            placeholder="Name of fish"
+          />
+          <input
+            value={length}
+            onChange={(event) => setLength(event.target.value)}
+            placeholder="Length"
+            type="number"
+          />
+
           <button onClick={() => {
+            if (fish === "" || Number(length) <= 0) {
+              return;
+            }
             setCatches([
               ...catches,
               {
                 id: Date.now(),
-                fish: "Painted Comber",
-                length: 18
+                fish: fish,
+                length: Number(length)
               }
             ])
+
+            setFish("")
+            setLength("")
           }}>Add Catch</button>
       </section>
   )
