@@ -6,6 +6,7 @@ type CatchItemProps = {
   length: number
   id: number
   onDelete: (id: number) => void
+  onEdit: (id: number) => void
 }
 
 function App() {
@@ -36,11 +37,29 @@ function App() {
   })
   const longestCatch = Math.max(...catchLengths)
 
+  const [editingId, setEditingId] = useState<number | null>(null)
+
   function handleSubmit(event:React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     if (fish === "" || Number(length) <= 0) {
       return;
+    }
+
+    if (editingId !== null) {
+      setCatches((currentCatches) => {
+        return currentCatches.map((catchItem) => {
+          if (catchItem.id === editingId) {
+            return {
+              id: catchItem.id,
+              fish: fish,
+              length: Number(length)
+            }
+          }
+          return catchItem
+        })
+      })
+      return
     }
 
     setCatches((currentCatches) => {
@@ -64,6 +83,20 @@ function App() {
         return catchItem.id !== id
       })
     })
+  }
+
+  function handleEdit(id: number) {
+    const catchToEdit = catches.find((catchItem) => {
+      return catchItem.id === id
+    })
+
+    if (catchToEdit === undefined) {
+      return
+    }
+
+    setEditingId(id)
+    setFish(catchToEdit.fish)
+    setLength(String(catchToEdit.length))
   }
 
   return (
@@ -90,6 +123,7 @@ function App() {
                   length={catchItem.length}
                   key={catchItem.id}
                   onDelete={handleDelete}
+                  onEdit={handleEdit}
                 />
               )
             })
@@ -107,17 +141,20 @@ function App() {
               placeholder="Length"
               type="number"
             />
-            <button type="submit">Add Catch</button>
+            <button type="submit">
+              {editingId !== null ? "Save Edit" : "Add Catch"}
+            </button>
           </form>
       </section>
   )
 }
 
-function CatchItem({ fish, length, id, onDelete }: CatchItemProps) {
+function CatchItem({ fish, length, id, onDelete, onEdit }: CatchItemProps) {
   return (
     <div>
       <p>{fish} - {length}cm</p>
       <button onClick={() => onDelete(id)}>Delete</button>
+      <button onClick={() => onEdit(id)}>Edit</button>
     </div>
   )
 }
