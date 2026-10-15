@@ -30,6 +30,11 @@ function App() {
 
   const [fish, setFish] = useState("");
   const [length, setLength] = useState("");
+ 
+  const catchLengths = catches.map((catchItem) => {
+    return catchItem.length
+  })
+  const longestCatch = Math.max(...catchLengths)
 
   function handleSubmit(event:React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -64,6 +69,18 @@ function App() {
   return (
       <section id="center">
         <h1>Catch Log</h1>
+          { 
+            catches.length === 0 
+              ? <h3>No catches logged yet</h3> 
+              : <h3>{catches.length} catches logged</h3> 
+          }
+
+          {
+            catches.length === 0
+              ? null
+              : <h3>Longest catch: {longestCatch}</h3>
+          }
+
           {
             catches.map((catchItem) => {
               return (
