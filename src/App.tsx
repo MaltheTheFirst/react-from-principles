@@ -2,8 +2,10 @@ import { useState } from 'react'
 import './App.css'
 
 type CatchItemProps = {
-  fish: string;
-  length: number;
+  fish: string
+  length: number
+  id: number
+  onDelete: (id: number) => void
 }
 
 function App() {
@@ -35,17 +37,28 @@ function App() {
     if (fish === "" || Number(length) <= 0) {
       return;
     }
-    setCatches([
-      ...catches,
+
+    setCatches((currentCatches) => {
+      return [
+        ...currentCatches,
         {
           id: Date.now(),
           fish: fish,
           length: Number(length)
         }
-    ])
+      ]
+    })
 
     setFish("")
     setLength("")
+  }
+
+  function handleDelete(id: number) {
+    setCatches((currentCatches) => {
+      return currentCatches.filter((catchItem) => {
+        return catchItem.id !== id
+      })
+    })
   }
 
   return (
@@ -55,9 +68,11 @@ function App() {
             catches.map((catchItem) => {
               return (
                 <CatchItem 
+                  id={catchItem.id}
                   fish={catchItem.fish}
                   length={catchItem.length}
                   key={catchItem.id}
+                  onDelete={handleDelete}
                 />
               )
             })
@@ -81,9 +96,12 @@ function App() {
   )
 }
 
-function CatchItem({ fish, length }: CatchItemProps) {
+function CatchItem({ fish, length, id, onDelete }: CatchItemProps) {
   return (
-    <p>{fish} - {length}cm</p>
+    <div>
+      <p>{fish} - {length}cm</p>
+      <button onClick={() => onDelete(id)}>Delete</button>
+    </div>
   )
 }
 
