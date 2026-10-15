@@ -59,6 +59,9 @@ function App() {
           return catchItem
         })
       })
+      setEditingId(null)
+      setFish("")
+      setLength("")
       return
     }
 
@@ -97,6 +100,12 @@ function App() {
     setEditingId(id)
     setFish(catchToEdit.fish)
     setLength(String(catchToEdit.length))
+  }
+
+  function handleCancelEdit() {
+    setEditingId(null)
+    setFish("")
+    setLength("")
   }
 
   return (
@@ -144,6 +153,10 @@ function App() {
             <button type="submit">
               {editingId !== null ? "Save Edit" : "Add Catch"}
             </button>
+            {
+              editingId !== null && 
+              <button type="button" onClick={handleCancelEdit}>Cancel</button>
+            }
           </form>
       </section>
   )
