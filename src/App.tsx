@@ -29,15 +29,15 @@ function App() {
     }
   ]);
 
-  const [fish, setFish] = useState("");
-  const [length, setLength] = useState("");
+  const [fish, setFish] = useState("")
+  const [length, setLength] = useState("")
+  const [editingId, setEditingId] = useState<number | null>(null)
+  const [search, setSearch] = useState("")
  
   const catchLengths = catches.map((catchItem) => {
     return catchItem.length
   })
   const longestCatch = Math.max(...catchLengths)
-
-  const [editingId, setEditingId] = useState<number | null>(null)
 
   function handleSubmit(event:React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -108,9 +108,23 @@ function App() {
     setLength("")
   }
 
+  const filteredCatches = catches.filter((catchItem) => {
+    return catchItem.fish
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  })
+
   return (
       <section id="center">
         <h1>Catch Log</h1>
+
+        <input
+          type="text"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder="Search catches"
+        />
+
           { 
             catches.length === 0 
               ? <h3>No catches logged yet</h3> 
@@ -124,7 +138,9 @@ function App() {
           }
 
           {
-            catches.map((catchItem) => {
+          search !== "" && filteredCatches.length === 0
+            ? <p>No catches match your search</p>
+            : filteredCatches.map((catchItem) => {
               return (
                 <CatchItem 
                   id={catchItem.id}
