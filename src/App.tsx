@@ -23,7 +23,7 @@ function App() {
       id: 2
     },
     {
-      fish: "Guilted Seabream",
+      fish: "Gilthead Seabream",
       length: 32,
       id: 3
     }
@@ -33,6 +33,7 @@ function App() {
   const [length, setLength] = useState("")
   const [editingId, setEditingId] = useState<number | null>(null)
   const [search, setSearch] = useState("")
+  const [sortOrder, setSortOrder] = useState("default")
  
   const catchLengths = catches.map((catchItem) => {
     return catchItem.length
@@ -114,9 +115,28 @@ function App() {
       .includes(search.toLowerCase())
   })
 
+  const sortedCatches = [...filteredCatches]
+
+  if (sortOrder === "shortest") {
+    sortedCatches.sort((a, b) => a.length - b.length)
+  }
+
+  if (sortOrder === "longest") {
+    sortedCatches.sort((a, b) => b.length - a.length)
+  }
+
   return (
       <section id="center">
         <h1>Catch Log</h1>
+
+        <select
+          value={sortOrder}
+          onChange={(event) => setSortOrder(event.target.value)}
+        >
+          <option value="default">Default</option>
+          <option value="shortest">Shortest first</option>
+          <option value="longest">Longest first</option>
+        </select>
 
         <input
           type="text"
@@ -140,7 +160,7 @@ function App() {
           {
           search !== "" && filteredCatches.length === 0
             ? <p>No catches match your search</p>
-            : filteredCatches.map((catchItem) => {
+            : sortedCatches.map((catchItem) => {
               return (
                 <CatchItem 
                   id={catchItem.id}
