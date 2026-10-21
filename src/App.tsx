@@ -179,6 +179,11 @@ function App() {
     sortedCatches.sort((a, b) => b.length - a.length)
   }
 
+  const displayLongestCatch =
+    unit === "cm"
+      ? longestCatch
+      : Number((longestCatch / 2.54).toFixed(1))
+
   return (
     <UnitContext value={unit}>
       <section id="center">
@@ -208,7 +213,7 @@ function App() {
         {
           catches.length === 0
             ? null
-            : <h3>Longest catch: {longestCatch}</h3>
+            : <h3>Longest catch: {displayLongestCatch}</h3>
         }
 
         {
