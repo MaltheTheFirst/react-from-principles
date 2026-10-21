@@ -1,6 +1,6 @@
 type CatchFormProps = {
     fish: string
-    length: number
+    length: string
     editingId: number | null
     onFishChange: (value: string) => void
     onLengthChange: (value: string) => void

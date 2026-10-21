@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef, useReducer } from 'react'
 import './App.css'
 import CatchList from './components/CatchList'
 import CatchForm from './components/CatchForm'
@@ -6,8 +6,59 @@ import CatchControls from './components/CatchControls'
 import type { Catch } from './types/Catch'
 import { useLocalStorage } from './hooks/useLocalStorage'
 
-function App() {
+type CatchFormState = {
+  fish: string
+  length: string
+  editingId: number | null
+}
 
+type CatchFormAction = 
+  | { type: "fishChanged"; value: string }
+  | { type: "lengthChanged"; value: string }
+  | { type: "startEditing"; id: number; fish: string; length: number }
+  | { type: "cancelEditing" }
+  | { type: "reset" }
+
+const initialFormState: CatchFormState = {
+  fish: "",
+  length: "",
+  editingId: null
+}
+
+function catchFormReducer(
+  state: CatchFormState,
+  action: CatchFormAction
+): CatchFormState {
+  switch (action.type) {
+    case  "fishChanged":
+      return {
+        ...state,
+        fish: action.value
+      }
+    
+    case "lengthChanged":
+      return {
+        ...state,
+        length: action.value
+    }
+  
+    case "startEditing":
+      return{
+        fish: action.fish,
+        length: String(action.length),
+        editingId: action.id
+    }
+
+    case "cancelEditing":
+    case "reset":
+      return initialFormState
+
+    default:
+      return state
+  }
+}
+
+function App() {
   const [catches, setCatches] = useLocalStorage<Catch[]>(
     "catches",
     [
@@ -29,9 +80,10 @@ function App() {
     ]
   )
 
-  const [fish, setFish] = useState("")
-  const [length, setLength] = useState("")
-  const [editingId, setEditingId] = useState<number | null>(null)
+  const [formState, dispatch] = useReducer(
+    catchFormReducer,
+    initialFormState
+  )
   const [search, setSearch] = useState("")
   const [sortOrder, setSortOrder] = useState("default")
   const fishInputRef = useRef<HTMLInputElement>(null)
@@ -44,26 +96,24 @@ function App() {
   function handleSubmit(event:React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    if (fish === "" || Number(length) <= 0) {
+    if (formState.fish === "" || Number(formState.length) <= 0) {
       return;
     }
 
-    if (editingId !== null) {
+    if (formState.editingId !== null) {
       setCatches((currentCatches) => {
         return currentCatches.map((catchItem) => {
-          if (catchItem.id === editingId) {
+          if (catchItem.id === formState.editingId) {
             return {
               id: catchItem.id,
-              fish: fish,
-              length: Number(length)
+              fish: formState.fish,
+              length: Number(formState.length)
             }
           }
           return catchItem
         })
       })
-      setEditingId(null)
-      setFish("")
-      setLength("")
+      dispatch({ type: "reset" })
       return
     }
 
@@ -72,14 +122,13 @@ function App() {
         ...currentCatches,
         {
           id: Date.now(),
-          fish: fish,
-          length: Number(length)
+          fish: formState.fish,
+          length: Number(formState.length)
         }
       ]
     })
 
-    setFish("")
-    setLength("")
+    dispatch({ type: "reset" })
   }
 
   function handleDelete(id: number) {
@@ -99,16 +148,17 @@ function App() {
       return
     }
 
-    setEditingId(id)
-    setFish(catchToEdit.fish)
-    setLength(String(catchToEdit.length))
+    dispatch({
+      type: "startEditing",
+      id: catchToEdit.id,
+      fish: catchToEdit.fish,
+      length: catchToEdit.length
+    })
     fishInputRef.current?.focus()
   }
 
   function handleCancelEdit() {
-    setEditingId(null)
-    setFish("")
-    setLength("")
+    dispatch({ type: "cancelEditing" })
   }
 
   const filteredCatches = catches.filter((catchItem) => {
@@ -160,11 +210,20 @@ function App() {
               />
           }
         <CatchForm 
-          fish={fish}
-          length={Number(length)}
-          editingId={editingId}
-          onFishChange={setFish}
-          onLengthChange={setLength}
+          fish={formState.fish}
+          length={formState.length}
+          editingId={formState.editingId}
+          onFishChange={(value) => {
+            dispatch({
+              type: "fishChanged",
+              value
+            }  
+          )}}
+          onLengthChange={(value) =>
+            dispatch({
+              type: "lengthChanged",
+              value
+            })}
           onSubmit={handleSubmit}
           onCancelEdit={handleCancelEdit}
           fishInputRef={fishInputRef}
