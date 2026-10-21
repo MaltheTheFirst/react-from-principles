@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import './App.css'
 import CatchItem from './components/CatchItem'
+import CatchList from './components/CatchList'
+import { CatchList } from './components/CatchList';
 
 function App() {
 
@@ -153,18 +155,11 @@ function App() {
           {
           search !== "" && filteredCatches.length === 0
             ? <p>No catches match your search</p>
-            : sortedCatches.map((catchItem) => {
-              return (
-                <CatchItem 
-                  id={catchItem.id}
-                  fish={catchItem.fish}
-                  length={catchItem.length}
-                  key={catchItem.id}
-                  onDelete={handleDelete}
-                  onEdit={handleEdit}
-                />
-              )
-            })
+            : <CatchList
+                catches={sortedCatches}
+                onDelete={handleDelete}
+                onEdit={handleEdit}
+              />
           }
 
           <form onSubmit={handleSubmit}>
