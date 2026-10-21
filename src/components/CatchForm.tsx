@@ -6,6 +6,7 @@ type CatchFormProps = {
     onLengthChange: (value: string) => void
     onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
     onCancelEdit: () => void
+    fishInputRef: React.RefObject<HTMLInputElement | null>
 }
 
 function CatchForm({
@@ -15,7 +16,8 @@ function CatchForm({
     onFishChange,
     onLengthChange,
     onSubmit,
-    onCancelEdit
+    onCancelEdit,
+    fishInputRef
 }: CatchFormProps) {
     return (
         <form onSubmit={onSubmit}>
@@ -23,6 +25,7 @@ function CatchForm({
                 value={fish}
                 onChange={(event) => onFishChange(event.target.value)}
                 placeholder="Name of fish"
+                ref={fishInputRef}
             />
             <input
                 value={length}

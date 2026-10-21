@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import CatchList from './components/CatchList'
 import CatchForm from './components/CatchForm'
@@ -37,6 +37,7 @@ function App() {
   const [editingId, setEditingId] = useState<number | null>(null)
   const [search, setSearch] = useState("")
   const [sortOrder, setSortOrder] = useState("default")
+  const fishInputRef = useRef<HTMLInputElement>(null)
  
   const catchLengths = catches.map((catchItem) => {
     return catchItem.length
@@ -104,6 +105,7 @@ function App() {
     setEditingId(id)
     setFish(catchToEdit.fish)
     setLength(String(catchToEdit.length))
+    fishInputRef.current?.focus()
   }
 
   function handleCancelEdit() {
@@ -172,6 +174,7 @@ function App() {
           onLengthChange={setLength}
           onSubmit={handleSubmit}
           onCancelEdit={handleCancelEdit}
+          fishInputRef={fishInputRef}
         />
       </section>
   )
