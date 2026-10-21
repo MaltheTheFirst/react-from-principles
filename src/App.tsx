@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import CatchList from './components/CatchList'
 import CatchForm from './components/CatchForm'
+import CatchControls from './components/CatchControls'
 import type { Catch } from './types/Catch'
 
 function App() {
@@ -108,20 +109,11 @@ function App() {
       <section id="center">
         <h1>Catch Log</h1>
 
-        <select
-          value={sortOrder}
-          onChange={(event) => setSortOrder(event.target.value)}
-        >
-          <option value="default">Default</option>
-          <option value="shortest">Shortest first</option>
-          <option value="longest">Longest first</option>
-        </select>
-
-        <input
-          type="text"
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search catches"
+        <CatchControls 
+          search={search}
+          sortOrder={sortOrder}
+          onSearchChange={setSearch}
+          onSortOrderChange={setSortOrder}
         />
 
           { 
@@ -147,7 +139,7 @@ function App() {
           }
         <CatchForm 
           fish={fish}
-          length={length}
+          length={Number(length)}
           editingId={editingId}
           onFishChange={setFish}
           onLengthChange={setLength}
