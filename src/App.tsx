@@ -1,4 +1,4 @@
-import { useState, useRef, useReducer } from 'react'
+import { useState, useRef, useReducer, useMemo } from 'react'
 import './App.css'
 import CatchList from './components/CatchList'
 import CatchForm from './components/CatchForm'
@@ -163,21 +163,28 @@ function App() {
     dispatch({ type: "cancelEditing" })
   }
 
-  const filteredCatches = catches.filter((catchItem) => {
-    return catchItem.fish
-      .toLowerCase()
-      .includes(search.toLowerCase())
-  })
+  const { filteredCatches, sortedCatches } = useMemo(() => {
+    const filteredCatches = catches.filter((catchItem) => {
+      return catchItem.fish
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    })
 
-  const sortedCatches = [...filteredCatches]
+    const sortedCatches = [...filteredCatches]
 
-  if (sortOrder === "shortest") {
-    sortedCatches.sort((a, b) => a.length - b.length)
-  }
+    if (sortOrder === "shortest") {
+      sortedCatches.sort((a, b) => a.length - b.length)
+    }
 
-  if (sortOrder === "longest") {
-    sortedCatches.sort((a, b) => b.length - a.length)
-  }
+    if (sortOrder === "longest") {
+      sortedCatches.sort((a, b) => b.length - a.length)
+    }
+
+    return {
+      filteredCatches,
+      sortedCatches
+    }
+  }, [catches, search, sortOrder])
 
   const displayLongestCatch =
     unit === "cm"
