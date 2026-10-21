@@ -1,4 +1,6 @@
 import type { Catch } from '../types/Catch'
+import { useContext } from 'react'
+import { UnitContext } from '../context/UnitContext'
 
 type CatchItemProps = Catch & {
   onDelete: (id: number) => void
@@ -6,9 +8,16 @@ type CatchItemProps = Catch & {
 }
 
 function CatchItem({ fish, length, id, onDelete, onEdit }: CatchItemProps) {
+  const unit = useContext(UnitContext)
+
+  const displayLength = 
+    unit === "cm"
+    ? length
+    : Number((length / 2.54).toFixed(1))
+  
   return (
     <div>
-      <p>{fish} - {length}cm</p>
+      <p>{fish} - {displayLength}{unit}</p>
       <button onClick={() => onDelete(id)}>Delete</button>
       <button onClick={() => onEdit(id)}>Edit</button>
     </div>

@@ -11,25 +11,25 @@ function CatchControls({
     onSearchChange,
     onSortOrderChange
 }: CatchControlsProps) {
-    return (
-        <>
-        <select
-          value={sortOrder}
-          onChange={(event) => onSortOrderChange(event.target.value)}
-        >
-          <option value="default">Default</option>
-          <option value="shortest">Shortest first</option>
-          <option value="longest">Longest first</option>
-        </select>
+  return (
+    <>
+      <input
+        type="text"
+        value={search}
+        onChange={(event) => onSearchChange(event.target.value)}
+        placeholder="Search catches"
+      />
 
-        <input
-          type="text"
-          value={search}
-          onChange={(event) => onSearchChange(event.target.value)}
-          placeholder="Search catches"
-        />
-        </>
-    )
+      <select
+        value={sortOrder}
+        onChange={(event) => onSortOrderChange(event.target.value)}
+      >
+        <option value="default">Default</option>
+        <option value="shortest">Shortest first</option>
+        <option value="longest">Longest first</option>
+      </select>
+    </>
+  )
 }
 
 export default CatchControls

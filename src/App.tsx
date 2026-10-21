@@ -5,6 +5,7 @@ import CatchForm from './components/CatchForm'
 import CatchControls from './components/CatchControls'
 import type { Catch } from './types/Catch'
 import { useLocalStorage } from './hooks/useLocalStorage'
+import { UnitContext } from './context/UnitContext'
 
 type CatchFormState = {
   fish: string
@@ -86,6 +87,7 @@ function App() {
   )
   const [search, setSearch] = useState("")
   const [sortOrder, setSortOrder] = useState("default")
+  const [unit, setUnit] = useState<"cm" | "in">("cm")
   const fishInputRef = useRef<HTMLInputElement>(null)
  
   const catchLengths = catches.map((catchItem) => {
@@ -178,6 +180,7 @@ function App() {
   }
 
   return (
+    <UnitContext value={unit}>
       <section id="center">
         <h1>Catch Log</h1>
 
@@ -188,27 +191,35 @@ function App() {
           onSortOrderChange={setSortOrder}
         />
 
-          { 
-            catches.length === 0 
-              ? <h3>No catches logged yet</h3> 
-              : <h3>{catches.length} catches logged</h3> 
-          }
+        <select
+          value={unit}
+          onChange={(event) => setUnit(event.target.value as "cm" | "in")}
+        >
+          <option value="cm">Centimeters</option>
+          <option value="in">Inches</option>
+        </select>
 
-          {
-            catches.length === 0
-              ? null
-              : <h3>Longest catch: {longestCatch}</h3>
-          }
+        { 
+          catches.length === 0 
+            ? <h3>No catches logged yet</h3> 
+            : <h3>{catches.length} catches logged</h3> 
+        }
 
-          {
-          search !== "" && filteredCatches.length === 0
-            ? <p>No catches match your search</p>
-            : <CatchList
-                catches={sortedCatches}
-                onDelete={handleDelete}
-                onEdit={handleEdit}
-              />
-          }
+        {
+          catches.length === 0
+            ? null
+            : <h3>Longest catch: {longestCatch}</h3>
+        }
+
+        {
+        search !== "" && filteredCatches.length === 0
+          ? <p>No catches match your search</p>
+          : <CatchList
+              catches={sortedCatches}
+              onDelete={handleDelete}
+              onEdit={handleEdit}
+            />
+        }
         <CatchForm 
           fish={formState.fish}
           length={formState.length}
@@ -229,6 +240,7 @@ function App() {
           fishInputRef={fishInputRef}
         />
       </section>
+    </UnitContext>
   )
 }
 

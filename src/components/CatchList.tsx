@@ -20,7 +20,7 @@ function CatchList({ catches, onDelete, onEdit }: CatchListProps) {
                             key={catchItem.id}
                             onDelete={onDelete}
                             onEdit={onEdit}
-                            />
+                        />
                     )
                 })
             }
