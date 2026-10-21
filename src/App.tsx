@@ -1,28 +1,11 @@
 import { useState } from 'react'
 import './App.css'
-import CatchItem from './components/CatchItem'
 import CatchList from './components/CatchList'
-import { CatchList } from './components/CatchList';
+import type { Catch } from './types/Catch'
 
 function App() {
 
-  const [catches, setCatches] = useState([
-    {
-      fish: "Horse Mackerel",
-      length: 16,
-      id: 1
-    },
-    {
-      fish: "Painted Comber",
-      length: 18,
-      id: 2
-    },
-    {
-      fish: "Gilthead Seabream",
-      length: 32,
-      id: 3
-    }
-  ]);
+  const [catches, setCatches] = useState<Catch[]>([]);
 
   const [fish, setFish] = useState("")
   const [length, setLength] = useState("")

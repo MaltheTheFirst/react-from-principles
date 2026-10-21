@@ -1,10 +1,5 @@
 import CatchItem from "./CatchItem"
-
-type Catch = {
-    id: number
-    fish: string
-    length: number
-}
+import type { Catch } from '../types/Catch'
 
 type CatchListProps = {
     catches: Catch[]

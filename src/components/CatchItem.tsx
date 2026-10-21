@@ -1,7 +1,6 @@
-type CatchItemProps = {
-  fish: string
-  length: number
-  id: number
+import type { Catch } from '../types/Catch'
+
+type CatchItemProps = Catch & {
   onDelete: (id: number) => void
   onEdit: (id: number) => void
 }
