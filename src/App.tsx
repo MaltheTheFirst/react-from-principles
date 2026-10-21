@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import CatchList from './components/CatchList'
 import CatchForm from './components/CatchForm'
@@ -7,8 +7,31 @@ import type { Catch } from './types/Catch'
 
 function App() {
 
-  const [catches, setCatches] = useState<Catch[]>([]);
+  const [catches, setCatches] = useState<Catch[]>(() => {
+    const storedCatches = localStorage.getItem("catches")
 
+    if (storedCatches === null) {
+      return [
+        {
+          fish: "Horse Mackerel",
+          length: 16,
+          id: 1
+        },
+        {
+          fish: "Painted Comber",
+          length: 12,
+          id: 2
+        },
+        {
+          fish: "Guilthead Seabream",
+          length: 12,
+          id: 3
+        }
+      ]
+    }
+
+    return JSON.parse(storedCatches)
+  })
   const [fish, setFish] = useState("")
   const [length, setLength] = useState("")
   const [editingId, setEditingId] = useState<number | null>(null)
@@ -104,6 +127,10 @@ function App() {
   if (sortOrder === "longest") {
     sortedCatches.sort((a, b) => b.length - a.length)
   }
+
+  useEffect(() => {
+    localStorage.setItem("catches", JSON.stringify(catches))
+  }, [catches])
 
   return (
       <section id="center">
