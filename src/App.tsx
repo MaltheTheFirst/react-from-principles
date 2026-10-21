@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import CatchList from './components/CatchList'
+import CatchForm from './components/CatchForm'
 import type { Catch } from './types/Catch'
 
 function App() {
@@ -144,27 +145,15 @@ function App() {
                 onEdit={handleEdit}
               />
           }
-
-          <form onSubmit={handleSubmit}>
-            <input 
-              value={fish}
-              onChange={(event) => setFish(event.target.value)}
-              placeholder="Name of fish"
-            />
-            <input
-              value={length}
-              onChange={(event) => setLength(event.target.value)}
-              placeholder="Length"
-              type="number"
-            />
-            <button type="submit">
-              {editingId !== null ? "Save Edit" : "Add Catch"}
-            </button>
-            {
-              editingId !== null && 
-              <button type="button" onClick={handleCancelEdit}>Cancel</button>
-            }
-          </form>
+        <CatchForm 
+          fish={fish}
+          length={length}
+          editingId={editingId}
+          onFishChange={setFish}
+          onLengthChange={setLength}
+          onSubmit={handleSubmit}
+          onCancelEdit={handleCancelEdit}
+        />
       </section>
   )
 }
