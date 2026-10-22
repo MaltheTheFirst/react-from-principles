@@ -1,8 +1,7 @@
 import { useState, useReducer, useRef, useCallback, useMemo } from 'react'
 import { Link } from 'react-router'
-import { useLocalStorage } from '../hooks/useLocalStorage';
 import { UnitContext } from '../context/UnitContext'
-import type { Catch } from '../types/Catch'
+import { useCatches } from '../context/CatchContext'
 import CatchControls from '../components/CatchControls'
 import CatchList from '../components/CatchList'
 import CatchForm from '../components/CatchForm'
@@ -61,31 +60,13 @@ function catchFormReducer(
 }
 
 function CatchLogPage() {
-    const [catches, setCatches] = useLocalStorage<Catch[]>(
-        "catches",
-        [
-            {
-            fish: "Horse Mackerel",
-            length: 16,
-            id: 1
-            },
-            {
-            fish: "Painted Comber",
-            length: 12,
-            id: 2
-            },
-            {
-            fish: "Guilthead Seabream",
-            length: 12,
-            id: 3
-            }
-        ]
-    )
+    const { catches, setCatches } = useCatches()
 
     const [formState, dispatch] = useReducer(
     catchFormReducer,
     initialFormState
     )
+
     const [search, setSearch] = useState("")
     const [sortOrder, setSortOrder] = useState("default")
     const [unit, setUnit] = useState<"cm" | "in">("cm")
@@ -94,6 +75,7 @@ function CatchLogPage() {
     const catchLengths = catches.map((catchItem) => {
     return catchItem.length
     })
+
     const longestCatch = Math.max(...catchLengths)
 
     function handleSubmit(event:React.FormEvent<HTMLFormElement>) {
