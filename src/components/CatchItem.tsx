@@ -1,3 +1,4 @@
+import { Link } from 'react-router'
 import type { Catch } from '../types/Catch'
 import { useContext } from 'react'
 import { UnitContext } from '../context/UnitContext'
@@ -17,7 +18,10 @@ function CatchItem({ fish, length, id, onDelete, onEdit }: CatchItemProps) {
   
   return (
     <div>
-      <p>{fish} - {displayLength}{unit}</p>
+      <p>
+        <Link to={`/catches/${id}`}>
+          {fish}
+        </Link> - {displayLength}{unit}</p>
       <button onClick={() => onDelete(id)}>Delete</button>
       <button onClick={() => onEdit(id)}>Edit</button>
     </div>

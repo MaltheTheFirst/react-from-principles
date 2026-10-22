@@ -182,3 +182,12 @@
     border-right-color: var(--border);
   }
 }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
