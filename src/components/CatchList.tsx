@@ -1,5 +1,6 @@
 import CatchItem from "./CatchItem"
 import type { Catch } from '../types/Catch'
+import { memo } from 'react'
 
 type CatchListProps = {
     catches: Catch[]
@@ -28,4 +29,4 @@ function CatchList({ catches, onDelete, onEdit }: CatchListProps) {
     )
 }
 
-export default CatchList
+export default memo(CatchList)

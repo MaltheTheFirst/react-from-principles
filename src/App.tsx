@@ -1,4 +1,4 @@
-import { useState, useRef, useReducer, useMemo } from 'react'
+import { useState, useRef, useReducer, useMemo, useCallback } from 'react'
 import './App.css'
 import CatchList from './components/CatchList'
 import CatchForm from './components/CatchForm'
@@ -133,15 +133,15 @@ function App() {
     dispatch({ type: "reset" })
   }
 
-  function handleDelete(id: number) {
+  const handleDelete = useCallback((id: number) => {
     setCatches((currentCatches) => {
       return currentCatches.filter((catchItem) => {
         return catchItem.id !== id
       })
     })
-  }
+  }, [setCatches])
 
-  function handleEdit(id: number) {
+  const handleEdit = useCallback((id: number) => {
     const catchToEdit = catches.find((catchItem) => {
       return catchItem.id === id
     })
@@ -157,7 +157,7 @@ function App() {
       length: catchToEdit.length
     })
     fishInputRef.current?.focus()
-  }
+  }, [catches])
 
   function handleCancelEdit() {
     dispatch({ type: "cancelEditing" })
