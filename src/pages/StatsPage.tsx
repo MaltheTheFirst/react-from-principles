@@ -8,14 +8,25 @@ type Species = {
 function StatsPage() {
     const [species, setSpecies] = useState<Species[]>([])
     const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
         async function loadSpecies() {
-            const response = await fetch('/species.json')
-            const data = await response.json()
+            try {
+                const response = await fetch('/species.json')
 
-            setSpecies(data)
-            setLoading(false)
+                if (!response.ok) {
+                    throw new Error('Failed to load species')
+                }
+
+                const data = await response.json()
+
+                setSpecies(data)
+            } catch {
+                setError('Could not load species')
+            } finally {
+                setLoading(false)
+            }
         }
 
         loadSpecies()
@@ -25,6 +36,14 @@ function StatsPage() {
         return (
             <section id="center">
                 <p>Loading Species...</p>
+            </section>
+        )
+    }
+
+    if (error) {
+        return (
+            <section id="center">
+                <p>{error}</p>
             </section>
         )
     }
