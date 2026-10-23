@@ -21,13 +21,17 @@ function CatchForm({
 }: CatchFormProps) {
     return (
         <form onSubmit={onSubmit}>
+            <label htmlFor="fish">Fish</label>
             <input 
+                id="fish"
                 value={fish}
                 onChange={(event) => onFishChange(event.target.value)}
                 placeholder="Name of fish"
                 ref={fishInputRef}
             />
+            <label htmlFor="length">Length</label>
             <input
+                id="length"
                 value={length}
                 onChange={(event) => onLengthChange(event.target.value)}
                 placeholder="Length"

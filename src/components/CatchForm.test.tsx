@@ -18,7 +18,7 @@ test('calls onFishChange when fish input changes', () => {
         />
     )
 
-    fireEvent.change(screen.getByPlaceholderText('Name of fish'), {
+    fireEvent.change(screen.getByLabelText('Fish'), {
         target: { value: 'Sea Bass' },
     })
 

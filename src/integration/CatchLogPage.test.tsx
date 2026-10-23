@@ -17,12 +17,12 @@ test('adds a catch through the catch log', () => {
     )
 
     fireEvent.change(
-        screen.getByPlaceholderText('Name of fish'),
+        screen.getByLabelText('Fish'),
         { target: { value: 'Sea Bass' } }
     )
 
     fireEvent.change(
-        screen.getByPlaceholderText('Length'),
+        screen.getByLabelText('Length'),
         { target: { value: '42' } }
     )
 
