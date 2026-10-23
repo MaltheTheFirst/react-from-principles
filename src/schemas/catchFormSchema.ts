@@ -6,10 +6,7 @@ export const catchFormSchema = z.object({
         .trim()
         .min(1, 'Enter a fish name'),
 
-    length: z
-        .string()
-        .refine(
-            (value) => Number(value) > 0,
-            'Enter a length greater than 0'
-        ),
+    length: z.coerce
+        .number()
+        .positive('Enter a length greater than 0')
 })

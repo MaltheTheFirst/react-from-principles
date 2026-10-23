@@ -144,14 +144,16 @@ function CatchLogPage() {
         return
     }
 
+    const validatedCatch = result.data
+
     if (formState.editingId !== null) {
         setCatches((currentCatches) => {
         return currentCatches.map((catchItem) => {
             if (catchItem.id === formState.editingId) {
             return {
                 id: catchItem.id,
-                fish: formState.fish,
-                length: Number(formState.length)
+                fish: validatedCatch.fish,
+                length: validatedCatch.length
             }
             }
             return catchItem
@@ -166,8 +168,8 @@ function CatchLogPage() {
         ...currentCatches,
         {
             id: Date.now(),
-            fish: formState.fish,
-            length: Number(formState.length)
+            fish: validatedCatch.fish,
+            length: validatedCatch.length
         }
         ]
     })
