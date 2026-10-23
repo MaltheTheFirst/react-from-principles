@@ -28,3 +28,17 @@ test('opens the correct catch detail from the log', () => {
         screen.getByText('Horse Mackerel')
     ).toBeInTheDocument()
 })
+
+test('shows not found for an invalid catch id', () => {
+    render(
+        <MemoryRouter initialEntries={['/catches/999999']}>
+            <CatchProvider>
+                <App />
+            </CatchProvider>
+        </MemoryRouter>
+    )
+
+    expect(
+        screen.getByRole('heading', { name: 'Catch not found' }
+    )).toBeInTheDocument()
+})
