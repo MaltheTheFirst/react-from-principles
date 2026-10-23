@@ -3,6 +3,10 @@ import { MemoryRouter } from 'react-router'
 import CatchLogPage from '../pages/CatchLogPage'
 import { CatchProvider } from '../context/CatchContext'
 
+beforeEach(() => {
+  localStorage.clear()
+})
+
 test('adds a catch through the catch log', () => {
     render(
         <MemoryRouter>
@@ -52,4 +56,50 @@ test('deletes a catch from the catch log', () => {
     )
 
     expect(screen.queryByText('Horse Mackerel')).not.toBeInTheDocument()
+})
+
+test('edits a catch through the catch log', () => {
+    render(
+        <MemoryRouter>
+            <CatchProvider>
+                <CatchLogPage />
+            </CatchProvider>
+        </MemoryRouter>
+    )
+
+    const horseMackerel = screen.getByText('Horse Mackerel')
+    const catchItem = horseMackerel.closest('div')
+
+    if (!catchItem) {
+        throw new Error('Catch item not found')
+    }
+
+    fireEvent.click(
+        within(catchItem).getByRole('button', { name: 'Edit' })
+    )
+
+    expect(
+        screen.getByPlaceholderText('Name of fish')
+    ).toHaveValue('Horse Mackerel')
+
+    expect(
+        screen.getByPlaceholderText('Length')
+    ).toHaveValue(16)
+
+    fireEvent.change(
+        screen.getByPlaceholderText('Name of fish'),
+        { target: { value: 'Atlantic Mackerel' } }
+    )
+
+    fireEvent.click(
+        screen.getByRole('button', { name: 'Save Edit' })
+    )
+
+    expect(
+        screen.getByText('Atlantic Mackerel')
+    ).toBeInTheDocument()
+
+    expect(
+        screen.queryByText('Horse Mackerel')
+    ).not.toBeInTheDocument()
 })
