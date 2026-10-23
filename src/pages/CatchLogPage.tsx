@@ -11,6 +11,7 @@ type CatchFormState = {
   fish: string
   length: string
   editingId: number | null
+  error: string | null
 }
 
 type CatchFormAction = 
@@ -19,11 +20,13 @@ type CatchFormAction =
   | { type: "startEditing"; id: number; fish: string; length: number }
   | { type: "cancelEditing" }
   | { type: "reset" }
+  | { type: "validationFailed"; message: string }
 
 const initialFormState: CatchFormState = {
   fish: "",
   length: "",
-  editingId: null
+  editingId: null,
+  error: null
 }
 
 function catchFormReducer(
@@ -44,15 +47,22 @@ function catchFormReducer(
     }
   
     case "startEditing":
-      return{
+      return {
         fish: action.fish,
         length: String(action.length),
-        editingId: action.id
+        editingId: action.id,
+        error: null
     }
 
     case "cancelEditing":
     case "reset":
       return initialFormState
+
+    case "validationFailed":
+      return {
+        ...state,
+        error: action.message
+    }
 
     default:
       return state
@@ -82,6 +92,11 @@ function CatchLogPage() {
     event.preventDefault()
 
     if (formState.fish === "" || Number(formState.length) <= 0) {
+        dispatch({
+            type: "validationFailed",
+            message: "Enter a fish name and a length greater than 0"
+        })
+
         return;
     }
 
@@ -222,9 +237,9 @@ function CatchLogPage() {
                 editingId={formState.editingId}
                 onFishChange={(value) => {
                     dispatch({
-                    type: "fishChanged",
-                    value
-                    }  
+                        type: "fishChanged",
+                        value
+                    }
                 )}}
                 onLengthChange={(value) =>
                     dispatch({
@@ -234,6 +249,7 @@ function CatchLogPage() {
                 onSubmit={handleSubmit}
                 onCancelEdit={handleCancelEdit}
                 fishInputRef={fishInputRef}
+                error={formState.error}
                 />
             </main>
         </UnitContext>

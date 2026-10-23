@@ -15,6 +15,7 @@ test('calls onFishChange when fish input changes', () => {
             onSubmit={() => {}}
             onCancelEdit={() => {}}
             fishInputRef={createRef<HTMLInputElement>()}
+            error={null}
         />
     )
 
@@ -38,6 +39,7 @@ test('calls onSubmit when the form is submitted', () => {
             onSubmit={onSubmit}
             onCancelEdit={() => {}}
             fishInputRef={createRef<HTMLInputElement>()}
+            error={null}
         />
     )
 
@@ -57,6 +59,7 @@ test('shows edit controls when editing a catch', () => {
             onSubmit={() => {}}
             onCancelEdit={() => {}}
             fishInputRef={createRef<HTMLInputElement>()}
+            error={null}
         />
     )
 
@@ -67,4 +70,24 @@ test('shows edit controls when editing a catch', () => {
     expect(
         screen.getByRole('button', { name: 'Cancel' })
     ).toBeInTheDocument()
+})
+
+test('shows a validation error', () => {
+    render(
+        <CatchForm
+            fish=""
+            length=""
+            editingId={null}
+            error="Enter a fish name and a length greater than 0"
+            onFishChange={() => {}}
+            onLengthChange={() => {}}
+            onSubmit={() => {}}
+            onCancelEdit={() => {}}
+            fishInputRef={createRef<HTMLInputElement>()}
+        />
+    )
+
+    expect(
+        screen.getByRole('alert')
+    ).toHaveTextContent('Enter a fish name and a length greater than 0')
 })

@@ -9,6 +9,7 @@ type CatchFormProps = {
     onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
     onCancelEdit: () => void
     fishInputRef: React.RefObject<HTMLInputElement | null>
+    error: string | null
 }
 
 function CatchForm({
@@ -19,7 +20,8 @@ function CatchForm({
     onLengthChange,
     onSubmit,
     onCancelEdit,
-    fishInputRef
+    fishInputRef,
+    error
 }: CatchFormProps) {
     return (
         <form className={styles.form} onSubmit={onSubmit}>
@@ -49,6 +51,12 @@ function CatchForm({
                     editingId !== null && 
                     <button type="button" onClick={onCancelEdit}>Cancel</button>
                 }
+
+                {error && (
+                    <p role="alert">
+                        {error}
+                    </p>
+                )}
             </div>
         </form>
     )
