@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, within } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import App from '../App'
 import { CatchProvider } from '../context/CatchContext'
@@ -26,6 +26,20 @@ test('opens the correct catch detail from the log', () => {
 
     expect(
         screen.getByText('Horse Mackerel')
+    ).toBeInTheDocument()
+
+    const navigation = screen.getByRole('navigation', { name: 'Primary' })
+
+    expect(
+       screen.getByRole('navigation', { name: 'Primary' }) 
+    ).toBeInTheDocument()
+
+    expect(
+        within(navigation).getByRole('link', { name: 'Catch Log' })
+    ).toBeInTheDocument()
+
+    expect(
+        within(navigation).getByRole('link', { name: 'Statistics' })
     ).toBeInTheDocument()
 })
 
