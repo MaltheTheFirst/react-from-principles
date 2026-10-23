@@ -2,6 +2,7 @@ import { useState, useReducer, useRef, useCallback, useMemo } from 'react'
 import { Link } from 'react-router'
 import { UnitContext } from '../context/UnitContext'
 import { useCatches } from '../context/CatchContext'
+import { catchFormSchema } from '../schemas/catchFormSchema'
 import CatchControls from '../components/CatchControls'
 import CatchList from '../components/CatchList'
 import CatchForm from '../components/CatchForm'
@@ -115,17 +116,17 @@ function CatchLogPage() {
     function handleSubmit(event:React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    const fishError = 
-        formState.fish.trim() === ""
-            ? "Enter a fish name"
-            : null
-    
-    const lengthError = 
-        Number(formState.length) <= 0
-            ? "Enter a length greater than 0"
-            : null
+    const result = catchFormSchema.safeParse({
+        fish: formState.fish,
+        length: formState.length
+    })
 
-    if (fishError || lengthError) {
+    if (!result.success) {
+        const fieldErrors = result.error.flatten().fieldErrors
+
+        const fishError = fieldErrors.fish?.[0] ?? null
+        const lengthError = fieldErrors.length?.[0] ?? null
+
         dispatch({
             type: "validationFailed",
             errors: {
@@ -139,18 +140,8 @@ function CatchLogPage() {
         } else if (lengthError) {
             lengthInputRef.current?.focus()
         }
-    }
 
-    if (formState.fish === "" || Number(formState.length) <= 0) {
-        dispatch({
-            type: "validationFailed",
-            errors: {
-                fish: fishError,
-                length: lengthError
-            }
-        })
-
-        return;
+        return
     }
 
     if (formState.editingId !== null) {
