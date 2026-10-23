@@ -24,3 +24,23 @@ test('calls onFishChange when fish input changes', () => {
 
     expect(onFishChange).toHaveBeenCalledWith('Sea Bass')
 })
+
+test('calls onSubmit when the form is submitted', () => {
+    const onSubmit = vi.fn()
+
+    render (
+        <CatchForm
+            fish="Sea Bass"
+            length="25"
+            editingId={null}
+            onFishChange={() => {}}
+            onLengthChange={() => {}}
+            onSubmit={onSubmit}
+            fishInputRef={createRef<HTMLInputElement>()}
+        />
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Add Catch' }))
+
+    expect(onSubmit).toHaveBeenCalled()
+})
