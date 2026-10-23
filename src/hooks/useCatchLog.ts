@@ -1,4 +1,4 @@
-import { useReducer, useRef , useCallback, } from 'react'
+import { useReducer, useRef , useCallback, useState, useMemo } from 'react'
 import { useCatches } from '../context/CatchContext'
 import { catchFormSchema } from '../schemas/catchFormSchema'
 import type { CatchFormData } from '../schemas/catchFormSchema'
@@ -101,11 +101,42 @@ export function useCatchLog() {
     const fishInputRef = useRef<HTMLInputElement>(null)
     const lengthInputRef = useRef<HTMLInputElement>(null)
     const { catches, setCatches } = useCatches()
-
     const [formState, dispatch] = useReducer(
         catchFormReducer,
         initialFormState
     )
+    const [search, setSearch] = useState("")
+    const [sortOrder, setSortOrder] = useState("default")
+
+    const { filteredCatches, sortedCatches } = useMemo(() => {
+        const filteredCatches = catches.filter((catchItem) => {
+            return catchItem.fish
+                .toLowerCase()
+                .includes(search.toLowerCase())
+            })  
+
+        const sortedCatches = [...filteredCatches]
+
+        if (sortOrder === "shortest") {
+            sortedCatches.sort((a, b) => a.length - b.length)
+        }
+
+        if (sortOrder === "longest") {
+            sortedCatches.sort((a, b) => b.length - a.length)
+        }
+
+        return {
+            filteredCatches,
+            sortedCatches
+        }
+		}, [catches, search, sortOrder])
+
+    const catchCount = catches.length
+    
+    const longestCatch = 
+        catches.length > 0
+            ? Math.max(...catches.map((catchItem) => catchItem.length))
+            : null
 
     function handleCancelEdit() {
         dispatch({ type: "cancelEditing" })
@@ -213,6 +244,14 @@ export function useCatchLog() {
         handleSubmit,
         fishInputRef,
         lengthInputRef,
+        search,
+        setSearch,
+        sortOrder,
+        setSortOrder,
+        filteredCatches,
+        sortedCatches,
+        catchCount,
+        longestCatch,
     }
 }
 

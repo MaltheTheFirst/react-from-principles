@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router'
 import { UnitContext } from '../context/UnitContext'
 import { useCatchLog } from '../hooks/useCatchLog'
@@ -17,46 +17,24 @@ function CatchLogPage() {
 			handleDelete,
 			handleSubmit,
 			fishInputRef, 
-			lengthInputRef 
+			lengthInputRef,
+			search,
+			setSearch,
+			sortOrder,
+			setSortOrder,
+			filteredCatches,
+			sortedCatches,
+			longestCatch
 		} = useCatchLog()
 
-    const [search, setSearch] = useState("")
-    const [sortOrder, setSortOrder] = useState("default")
     const [unit, setUnit] = useState<"cm" | "in">("cm")
 
-    const catchLengths = catches.map((catchItem) => {
-        return catchItem.length
-    })
-
-    const longestCatch = Math.max(...catchLengths)
-
-		const { filteredCatches, sortedCatches } = useMemo(() => {
-			const filteredCatches = catches.filter((catchItem) => {
-				return catchItem.fish
-					.toLowerCase()
-					.includes(search.toLowerCase())
-			})
-
-			const sortedCatches = [...filteredCatches]
-
-			if (sortOrder === "shortest") {
-				sortedCatches.sort((a, b) => a.length - b.length)
-			}
-
-			if (sortOrder === "longest") {
-				sortedCatches.sort((a, b) => b.length - a.length)
-			}
-
-			return {
-				filteredCatches,
-				sortedCatches
-			}
-		}, [catches, search, sortOrder])
-
 		const displayLongestCatch =
-			unit === "cm"
-				? longestCatch
-				: Number((longestCatch / 2.54).toFixed(1))
+				longestCatch === null
+						? null
+						: unit === "cm"
+								? longestCatch
+								: Number((longestCatch / 2.54).toFixed(1))
 
     return (
         <UnitContext value={unit}>
@@ -88,7 +66,7 @@ function CatchLogPage() {
                 {
                 catches.length === 0
                     ? null
-                    : <h3>Longest catch: {displayLongestCatch}</h3>
+                    : <h3>Longest catch: {displayLongestCatch}{unit}</h3>
                 }
 
                 {
