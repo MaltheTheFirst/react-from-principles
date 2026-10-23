@@ -1,4 +1,7 @@
 #center {
+  width: min(100% - 2rem, var(--content-width));
+  margin: 0 auto;
+
   display: flex;
   flex-direction: column;
   gap: 25px;
@@ -19,4 +22,12 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+:root {
+  --control-height: 2.5rem;
+  --radius: 0.5rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --content-width: 48rem;
 }

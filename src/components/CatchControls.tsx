@@ -25,6 +25,7 @@ function CatchControls({
         />
 
         <select
+          className={styles.select}
           value={sortOrder}
           onChange={(event) => onSortOrderChange(event.target.value)}
         >

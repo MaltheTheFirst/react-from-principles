@@ -1,14 +1,16 @@
 .form {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--space-sm);
 }
 
 .input{
-    padding: 0.5rem;
+    min-height: var(--control-height);
+    padding: 0 var(--space-sm);
+    border-radius: var(--radius)
 }
 
 .actions {
     display: flex;
-    gap: 0.5rem;
+    gap: var(--space-sm);
 }
