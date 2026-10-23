@@ -1,0 +1,11 @@
+.controls {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.search {
+    flex: 1;
+    min-width: 12rem;
+}

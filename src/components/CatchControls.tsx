@@ -1,3 +1,5 @@
+import styles from './CatchControls.module.css'
+
 type CatchControlsProps = {
     search: string
     sortOrder: string
@@ -13,21 +15,24 @@ function CatchControls({
 }: CatchControlsProps) {
   return (
     <>
-      <input
-        type="text"
-        value={search}
-        onChange={(event) => onSearchChange(event.target.value)}
-        placeholder="Search catches"
-      />
+      <div className={styles.controls}>
+        <input
+          className={styles.search}
+          type="text"
+          value={search}
+          onChange={(event) => onSearchChange(event.target.value)}
+          placeholder="Search catches"
+        />
 
-      <select
-        value={sortOrder}
-        onChange={(event) => onSortOrderChange(event.target.value)}
-      >
-        <option value="default">Default</option>
-        <option value="shortest">Shortest first</option>
-        <option value="longest">Longest first</option>
-      </select>
+        <select
+          value={sortOrder}
+          onChange={(event) => onSortOrderChange(event.target.value)}
+        >
+          <option value="default">Default</option>
+          <option value="shortest">Shortest first</option>
+          <option value="longest">Longest first</option>
+        </select>
+      </div>
     </>
   )
 }
