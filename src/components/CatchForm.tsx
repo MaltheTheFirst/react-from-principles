@@ -36,6 +36,8 @@ function CatchForm({
                 onChange={(event) => onFishChange(event.target.value)}
                 placeholder="Name of fish"
                 ref={fishInputRef}
+                aria-invalid={errors.fish !== null}
+                aria-describedby={errors.fish ? 'fish-error' : undefined}
             />
             <label htmlFor="length">Length</label>
             <input
@@ -45,6 +47,8 @@ function CatchForm({
                 onChange={(event) => onLengthChange(event.target.value)}
                 placeholder="Length"
                 type="number"
+                aria-invalid={errors.length !== null}
+                aria-describedby={errors.length ? 'length-error' : undefined}
             />
             <div className={styles.actions}>
                 <button type="submit">
@@ -56,13 +60,13 @@ function CatchForm({
                 }
 
                 {errors.fish && (
-                    <p role="alert">
+                    <p id="fish-error" role="alert">
                         {errors.fish}
                     </p>
                 )}
 
                 {errors.length && (
-                    <p role="alert">
+                    <p id="length-error" role="alert">
                         {errors.length}
                     </p>
                 )}

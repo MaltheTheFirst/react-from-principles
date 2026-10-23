@@ -107,3 +107,31 @@ test('shows a validation error', () => {
         screen.getByText('Enter a length greater than 0')
     ).toBeInTheDocument()
 })
+
+test('marks invalid fileds and links them to their error messages', () => {
+    render(
+        <CatchForm
+            fish=""
+            length=""
+            editingId={null}
+            errors={{
+                fish: 'Enter a fish name',
+                length: 'Enter a length greater than 0'
+            }}
+            onFishChange={() => {}}
+            onLengthChange={() => {}}
+            onSubmit={() => {}}
+            onCancelEdit={() => {}}
+            fishInputRef={createRef<HTMLInputElement>()}
+        />
+    )
+
+    const fishInput = screen.getByLabelText('Fish')
+    const lengthInput = screen.getByLabelText('Length')
+
+    expect(fishInput).toHaveAttribute('aria-invalid', 'true')
+    expect(fishInput).toHaveAttribute('aria-describedby', 'fish-error')
+
+    expect(lengthInput).toHaveAttribute('aria-invalid', 'true')
+    expect(lengthInput).toHaveAttribute('aria-describedby', 'length-error')
+})
