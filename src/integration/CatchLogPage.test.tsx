@@ -103,3 +103,23 @@ test('edits a catch through the catch log', () => {
         screen.queryByText('Horse Mackerel')
     ).not.toBeInTheDocument()
 })
+
+test('shows validation feedback for an invalid catch', () => {
+    render(
+        <MemoryRouter>
+            <CatchProvider>
+                <CatchLogPage />
+            </CatchProvider>
+        </MemoryRouter>
+    )
+
+    fireEvent.click(
+        screen.getByRole('button', { name: 'Add Catch' })
+    )
+
+    expect(
+        screen.getByRole('alert')
+    ).toHaveTextContent(
+        'Enter a fish name and a length greater than 0'
+    )
+})
