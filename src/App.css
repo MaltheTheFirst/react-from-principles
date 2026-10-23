@@ -25,9 +25,16 @@ a:hover {
 }
 
 :root {
-  --control-height: 2.5rem;
-  --radius: 0.5rem;
+  --control-height: 2rem;
+  --radius: 0.2rem;
   --space-sm: 0.5rem;
   --space-md: 1rem;
   --content-width: 48rem;
+}
+
+button {
+  min-height: var(--control-height);
+  padding: 0 var(--space-md);
+  border-radius: var(--radius);
+  cursor: pointer;
 }

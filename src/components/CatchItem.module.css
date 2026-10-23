@@ -1,14 +1,15 @@
 .item {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: var(--space-sm);
 }
 
 .details {
     margin: 0;
+    flex: 1;
 }
 
 .actions {
     display: flex;
-    margin: 0.5rem;
+    margin: var(--space-sm);
 }
