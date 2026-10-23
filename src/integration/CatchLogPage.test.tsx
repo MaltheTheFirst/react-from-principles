@@ -123,3 +123,28 @@ test('shows validation feedback for an invalid catch', () => {
         'Enter a fish name and a length greater than 0'
     )
 })
+
+test('clears validation feedback when the user edits the form', () => {
+    render(
+        <MemoryRouter>
+            <CatchProvider>
+                <CatchLogPage />
+            </CatchProvider>
+        </MemoryRouter>
+    )
+
+    fireEvent.click(
+        screen.getByRole('button', { name: 'Add Catch' })
+    )
+
+    expect(screen.getByRole('alert')).toBeInTheDocument()
+
+    fireEvent.change(
+        screen.getByLabelText('Fish'),
+        { target: { value: 'Sea Bass' } }
+    )
+
+    expect(
+        screen.queryByRole('alert')
+    ).not.toBeInTheDocument()
+})

@@ -37,13 +37,15 @@ function catchFormReducer(
     case  "fishChanged":
       return {
         ...state,
-        fish: action.value
+        fish: action.value,
+        error: null
       }
     
     case "lengthChanged":
       return {
         ...state,
-        length: action.value
+        length: action.value,
+        error: null
     }
   
     case "startEditing":
