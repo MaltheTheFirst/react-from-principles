@@ -118,10 +118,12 @@ test('shows validation feedback for an invalid catch', () => {
     )
 
     expect(
-        screen.getByRole('alert')
-    ).toHaveTextContent(
-        'Enter a fish name and a length greater than 0'
-    )
+        screen.getByText('Enter a fish name')
+    ).toBeInTheDocument()
+
+    expect(
+        screen.getByText('Enter a length greater than 0')
+    ).toBeInTheDocument()
 })
 
 test('clears validation feedback when the user edits the form', () => {
@@ -137,7 +139,13 @@ test('clears validation feedback when the user edits the form', () => {
         screen.getByRole('button', { name: 'Add Catch' })
     )
 
-    expect(screen.getByRole('alert')).toBeInTheDocument()
+    expect(
+        screen.getByText('Enter a fish name')
+    ).toBeInTheDocument()
+
+    expect(
+        screen.getByText('Enter a length greater than 0')
+    ).toBeInTheDocument()
 
     fireEvent.change(
         screen.getByLabelText('Fish'),
@@ -145,6 +153,10 @@ test('clears validation feedback when the user edits the form', () => {
     )
 
     expect(
-        screen.queryByRole('alert')
+        screen.queryByText('Enter a fish name')
     ).not.toBeInTheDocument()
+
+    expect(
+        screen.queryByText('Enter a length greater than 0')
+    ).toBeInTheDocument()
 })

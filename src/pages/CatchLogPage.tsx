@@ -11,7 +11,20 @@ type CatchFormState = {
   fish: string
   length: string
   editingId: number | null
-  error: string | null
+  errors: {
+    fish: string | null
+    length: string | null
+  }
+}
+
+const initialFormState: CatchFormState = {
+  fish: "",
+  length: "",
+  editingId: null,
+  errors: {
+    fish: null,
+    length: null
+  }
 }
 
 type CatchFormAction = 
@@ -20,14 +33,13 @@ type CatchFormAction =
   | { type: "startEditing"; id: number; fish: string; length: number }
   | { type: "cancelEditing" }
   | { type: "reset" }
-  | { type: "validationFailed"; message: string }
-
-const initialFormState: CatchFormState = {
-  fish: "",
-  length: "",
-  editingId: null,
-  error: null
-}
+  | {
+      type: "validationFailed",
+      errors: {
+        fish: string | null
+        length: string | null
+      } 
+    }
 
 function catchFormReducer(
   state: CatchFormState,
@@ -38,14 +50,20 @@ function catchFormReducer(
       return {
         ...state,
         fish: action.value,
-        error: null
+        errors: {
+            ...state.errors,
+            fish: null
+        }
       }
     
     case "lengthChanged":
       return {
         ...state,
         length: action.value,
-        error: null
+        errors: {
+            ...state.errors,
+            length: null
+        }
     }
   
     case "startEditing":
@@ -53,7 +71,10 @@ function catchFormReducer(
         fish: action.fish,
         length: String(action.length),
         editingId: action.id,
-        error: null
+        errors: {
+            fish: null,
+            length: null
+        }
     }
 
     case "cancelEditing":
@@ -63,7 +84,7 @@ function catchFormReducer(
     case "validationFailed":
       return {
         ...state,
-        error: action.message
+        errors: action.errors
     }
 
     default:
@@ -93,10 +114,33 @@ function CatchLogPage() {
     function handleSubmit(event:React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
+    const fishError = 
+        formState.fish.trim() === ""
+            ? "Enter a fish name"
+            : null
+    
+    const lengthError = 
+        Number(formState.length) <= 0
+            ? "Enter a length greater than 0"
+            : null
+
+    if (fishError || lengthError) {
+        dispatch({
+            type: "validationFailed",
+            errors: {
+                fish: fishError,
+                length: lengthError
+            }
+        })
+    }
+
     if (formState.fish === "" || Number(formState.length) <= 0) {
         dispatch({
             type: "validationFailed",
-            message: "Enter a fish name and a length greater than 0"
+            errors: {
+                fish: fishError,
+                length: lengthError
+            }
         })
 
         return;
@@ -251,7 +295,7 @@ function CatchLogPage() {
                 onSubmit={handleSubmit}
                 onCancelEdit={handleCancelEdit}
                 fishInputRef={fishInputRef}
-                error={formState.error}
+                errors={formState.errors}
                 />
             </main>
         </UnitContext>
