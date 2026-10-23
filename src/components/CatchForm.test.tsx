@@ -28,7 +28,7 @@ test('calls onFishChange when fish input changes', () => {
 test('calls onSubmit when the form is submitted', () => {
     const onSubmit = vi.fn()
 
-    render (
+    render(
         <CatchForm
             fish="Sea Bass"
             length="25"
@@ -36,6 +36,7 @@ test('calls onSubmit when the form is submitted', () => {
             onFishChange={() => {}}
             onLengthChange={() => {}}
             onSubmit={onSubmit}
+            onCancelEdit={() => {}}
             fishInputRef={createRef<HTMLInputElement>()}
         />
     )
@@ -43,4 +44,27 @@ test('calls onSubmit when the form is submitted', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Add Catch' }))
 
     expect(onSubmit).toHaveBeenCalled()
+})
+
+test('shows edit controls when editing a catch', () => {
+    render(
+        <CatchForm
+            fish="Sea Bass"
+            length="25"
+            editingId={1}
+            onFishChange={() => {}}
+            onLengthChange={() => {}}
+            onSubmit={() => {}}
+            onCancelEdit={() => {}}
+            fishInputRef={createRef<HTMLInputElement>()}
+        />
+    )
+
+    expect(
+        screen.getByRole('button', { name: 'Save Edit' })
+    ).toBeInTheDocument()
+
+    expect(
+        screen.getByRole('button', { name: 'Cancel' })
+    ).toBeInTheDocument()
 })
