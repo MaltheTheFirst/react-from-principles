@@ -9,6 +9,7 @@ type CatchFormProps = {
     onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
     onCancelEdit: () => void
     fishInputRef: React.RefObject<HTMLInputElement | null>
+    lengthInputRef: React.RefObject<HTMLInputElement | null>
     errors: {
         fish: string | null
         length: string | null
@@ -24,6 +25,7 @@ function CatchForm({
     onSubmit,
     onCancelEdit,
     fishInputRef,
+    lengthInputRef,
     errors
 }: CatchFormProps) {
     return (
@@ -46,6 +48,7 @@ function CatchForm({
                 value={length}
                 onChange={(event) => onLengthChange(event.target.value)}
                 placeholder="Length"
+                ref={lengthInputRef}
                 type="number"
                 aria-invalid={errors.length !== null}
                 aria-describedby={errors.length ? 'length-error' : undefined}

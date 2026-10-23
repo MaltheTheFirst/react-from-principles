@@ -15,6 +15,7 @@ test('calls onFishChange when fish input changes', () => {
             onSubmit={() => {}}
             onCancelEdit={() => {}}
             fishInputRef={createRef<HTMLInputElement>()}
+            lengthInputRef={createRef<HTMLInputElement>()}
             errors={{
                 fish: null,
                 length: null
@@ -42,6 +43,7 @@ test('calls onSubmit when the form is submitted', () => {
             onSubmit={onSubmit}
             onCancelEdit={() => {}}
             fishInputRef={createRef<HTMLInputElement>()}
+            lengthInputRef={createRef<HTMLInputElement>()}
             errors={{
                 fish: null,
                 length: null
@@ -65,6 +67,7 @@ test('shows edit controls when editing a catch', () => {
             onSubmit={() => {}}
             onCancelEdit={() => {}}
             fishInputRef={createRef<HTMLInputElement>()}
+            lengthInputRef={createRef<HTMLInputElement>()}
             errors={{
                 fish: null,
                 length: null
@@ -96,6 +99,7 @@ test('shows a validation error', () => {
             onSubmit={() => {}}
             onCancelEdit={() => {}}
             fishInputRef={createRef<HTMLInputElement>()}
+            lengthInputRef={createRef<HTMLInputElement>()}
         />
     )
 
@@ -123,6 +127,7 @@ test('marks invalid fileds and links them to their error messages', () => {
             onSubmit={() => {}}
             onCancelEdit={() => {}}
             fishInputRef={createRef<HTMLInputElement>()}
+            lengthInputRef={createRef<HTMLInputElement>()}
         />
     )
 

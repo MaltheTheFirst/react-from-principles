@@ -104,6 +104,7 @@ function CatchLogPage() {
     const [sortOrder, setSortOrder] = useState("default")
     const [unit, setUnit] = useState<"cm" | "in">("cm")
     const fishInputRef = useRef<HTMLInputElement>(null)
+    const lengthInputRef = useRef<HTMLInputElement>(null)
 
     const catchLengths = catches.map((catchItem) => {
     return catchItem.length
@@ -132,6 +133,12 @@ function CatchLogPage() {
                 length: lengthError
             }
         })
+
+        if (fishError) {
+            fishInputRef.current?.focus()
+        } else if (lengthError) {
+            lengthInputRef.current?.focus()
+        }
     }
 
     if (formState.fish === "" || Number(formState.length) <= 0) {
@@ -295,6 +302,7 @@ function CatchLogPage() {
                 onSubmit={handleSubmit}
                 onCancelEdit={handleCancelEdit}
                 fishInputRef={fishInputRef}
+                lengthInputRef={lengthInputRef}
                 errors={formState.errors}
                 />
             </main>
