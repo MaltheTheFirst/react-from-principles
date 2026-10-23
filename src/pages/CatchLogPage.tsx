@@ -1,3 +1,5 @@
+import type { CatchFormData } from '../schemas/catchFormSchema'
+import type { Catch } from '../types/Catch'
 import { useState, useReducer, useRef, useCallback, useMemo } from 'react'
 import { Link } from 'react-router'
 import { UnitContext } from '../context/UnitContext'
@@ -41,6 +43,14 @@ type CatchFormAction =
         length: string | null
       } 
     }
+
+function buildCatch(data: CatchFormData): Catch {
+    return {
+        id: Date.now(),
+        fish: data.fish,
+        length: data.length,
+    }
+}
 
 function catchFormReducer(
   state: CatchFormState,
@@ -97,8 +107,8 @@ function CatchLogPage() {
     const { catches, setCatches } = useCatches()
 
     const [formState, dispatch] = useReducer(
-    catchFormReducer,
-    initialFormState
+        catchFormReducer,
+        initialFormState
     )
 
     const [search, setSearch] = useState("")
@@ -108,132 +118,133 @@ function CatchLogPage() {
     const lengthInputRef = useRef<HTMLInputElement>(null)
 
     const catchLengths = catches.map((catchItem) => {
-    return catchItem.length
+        return catchItem.length
     })
 
     const longestCatch = Math.max(...catchLengths)
 
-    function handleSubmit(event:React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+		function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+			event.preventDefault()
 
-    const result = catchFormSchema.safeParse({
-        fish: formState.fish,
-        length: formState.length
-    })
+			const result = catchFormSchema.safeParse({
+				fish: formState.fish,
+				length: formState.length
+			})
 
-    if (!result.success) {
-        const fieldErrors = result.error.flatten().fieldErrors
+			if (!result.success) {
+				const fieldErrors = result.error.flatten().fieldErrors
 
-        const fishError = fieldErrors.fish?.[0] ?? null
-        const lengthError = fieldErrors.length?.[0] ?? null
+				const fishError = fieldErrors.fish?.[0] ?? null
+				const lengthError = fieldErrors.length?.[0] ?? null
 
-        dispatch({
-            type: "validationFailed",
-            errors: {
-                fish: fishError,
-                length: lengthError
-            }
-        })
+				dispatch({
+					type: "validationFailed",
+					errors: {
+						fish: fishError,
+						length: lengthError
+					}
+				})
 
-        if (fishError) {
-            fishInputRef.current?.focus()
-        } else if (lengthError) {
-            lengthInputRef.current?.focus()
-        }
+				if (fishError) {
+					fishInputRef.current?.focus()
+				} else if (lengthError) {
+					lengthInputRef.current?.focus()
+				}
 
-        return
-    }
+				return
+			}
 
-    const validatedCatch = result.data
+			const validatedCatch = result.data
 
-    if (formState.editingId !== null) {
-        setCatches((currentCatches) => {
-        return currentCatches.map((catchItem) => {
-            if (catchItem.id === formState.editingId) {
-            return {
-                id: catchItem.id,
-                fish: validatedCatch.fish,
-                length: validatedCatch.length
-            }
-            }
-            return catchItem
-        })
-        })
-        dispatch({ type: "reset" })
-        return
-    }
+			if (formState.editingId !== null) {
+				setCatches((currentCatches) => {
+					return currentCatches.map((catchItem) => {
+						if (catchItem.id === formState.editingId) {
+							return {
+								id: catchItem.id,
+								fish: validatedCatch.fish,
+								length: validatedCatch.length
+							}
+						}
 
-    setCatches((currentCatches) => {
-        return [
-        ...currentCatches,
-        {
-            id: Date.now(),
-            fish: validatedCatch.fish,
-            length: validatedCatch.length
-        }
-        ]
-    })
+						return catchItem
+					})
+				})
 
-    dispatch({ type: "reset" })
-    }
+				dispatch({ type: "reset" })
+				return
+			}
 
-    const handleDelete = useCallback((id: number) => {
-    setCatches((currentCatches) => {
-        return currentCatches.filter((catchItem) => {
-        return catchItem.id !== id
-        })
-    })
-    }, [setCatches])
+			const newCatch = buildCatch(validatedCatch)
 
-    const handleEdit = useCallback((id: number) => {
-    const catchToEdit = catches.find((catchItem) => {
-        return catchItem.id === id
-    })
+			setCatches((currentCatches) => {
+				return [
+					...currentCatches,
+					newCatch
+				]
+			})
 
-    if (catchToEdit === undefined) {
-        return
-    }
+			dispatch({ type: "reset" })
+		}
 
-    dispatch({
-        type: "startEditing",
-        id: catchToEdit.id,
-        fish: catchToEdit.fish,
-        length: catchToEdit.length
-    })
-    fishInputRef.current?.focus()
-    }, [catches])
+		const handleDelete = useCallback((id: number) => {
+			setCatches((currentCatches) => {
+				return currentCatches.filter((catchItem) => {
+					return catchItem.id !== id
+				})
+			})
+		}, [setCatches])
 
-    function handleCancelEdit() {
-    dispatch({ type: "cancelEditing" })
-    }
+		const handleEdit = useCallback((id: number) => {
+			const catchToEdit = catches.find((catchItem) => {
+				return catchItem.id === id
+			})
 
-    const { filteredCatches, sortedCatches } = useMemo(() => {
-    const filteredCatches = catches.filter((catchItem) => {
-        return catchItem.fish
-        .toLowerCase()
-        .includes(search.toLowerCase())
-    })
+			if (catchToEdit === undefined) {
+				return
+			}
 
-    const sortedCatches = [...filteredCatches]
+			dispatch({
+				type: "startEditing",
+				id: catchToEdit.id,
+				fish: catchToEdit.fish,
+				length: catchToEdit.length
+			})
 
-    if (sortOrder === "shortest") {
-        sortedCatches.sort((a, b) => a.length - b.length)
-    }
+			fishInputRef.current?.focus()
+		}, [catches])
 
-    if (sortOrder === "longest") {
-        sortedCatches.sort((a, b) => b.length - a.length)
-    }
+		function handleCancelEdit() {
+			dispatch({ type: "cancelEditing" })
+		}
 
-    return {
-        filteredCatches,
-        sortedCatches
-    }
-    }, [catches, search, sortOrder])
+		const { filteredCatches, sortedCatches } = useMemo(() => {
+			const filteredCatches = catches.filter((catchItem) => {
+				return catchItem.fish
+					.toLowerCase()
+					.includes(search.toLowerCase())
+			})
 
-    const displayLongestCatch =
-    unit === "cm"
-        ? longestCatch
-        : Number((longestCatch / 2.54).toFixed(1))
+			const sortedCatches = [...filteredCatches]
+
+			if (sortOrder === "shortest") {
+				sortedCatches.sort((a, b) => a.length - b.length)
+			}
+
+			if (sortOrder === "longest") {
+				sortedCatches.sort((a, b) => b.length - a.length)
+			}
+
+			return {
+				filteredCatches,
+				sortedCatches
+			}
+		}, [catches, search, sortOrder])
+
+		const displayLongestCatch =
+			unit === "cm"
+				? longestCatch
+				: Number((longestCatch / 2.54).toFixed(1))
 
     return (
         <UnitContext value={unit}>

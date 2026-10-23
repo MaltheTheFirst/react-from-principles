@@ -10,3 +10,5 @@ export const catchFormSchema = z.object({
         .number()
         .positive('Enter a length greater than 0')
 })
+
+export type CatchFormData = z.infer<typeof catchFormSchema>
