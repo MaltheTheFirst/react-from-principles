@@ -45,7 +45,7 @@ test('deletes a catch from the catch log', () => {
     expect(screen.getByText('Horse Mackerel')).toBeInTheDocument()
 
     const horseMackerel = screen.getByText('Horse Mackerel')
-    const catchItem = horseMackerel.closest('div')
+    const catchItem = horseMackerel.closest('li')
 
     if (!catchItem) {
         throw new Error('Catch item not found')
@@ -68,7 +68,7 @@ test('edits a catch through the catch log', () => {
     )
 
     const horseMackerel = screen.getByText('Horse Mackerel')
-    const catchItem = horseMackerel.closest('div')
+    const catchItem = horseMackerel.closest('li')
 
     if (!catchItem) {
         throw new Error('Catch item not found')

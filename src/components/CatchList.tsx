@@ -10,7 +10,7 @@ type CatchListProps = {
 
 function CatchList({ catches, onDelete, onEdit }: CatchListProps) {
     return(
-        <>
+        <ul>
             {
                 catches.map((catchItem) => {
                     return (
@@ -25,7 +25,7 @@ function CatchList({ catches, onDelete, onEdit }: CatchListProps) {
                     )
                 })
             }
-        </>
+        </ul>
     )
 }
 

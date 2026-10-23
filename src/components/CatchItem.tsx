@@ -17,14 +17,14 @@ function CatchItem({ fish, length, id, onDelete, onEdit }: CatchItemProps) {
     : Number((length / 2.54).toFixed(1))
   
   return (
-    <div>
+    <li>
       <p>
         <Link to={`/catches/${id}`}>
           {fish}
         </Link> - {displayLength}{unit}</p>
       <button onClick={() => onDelete(id)}>Delete</button>
       <button onClick={() => onEdit(id)}>Edit</button>
-    </div>
+    </li>
   )
 }
 
