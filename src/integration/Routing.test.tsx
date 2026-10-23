@@ -41,6 +41,10 @@ test('opens the correct catch detail from the log', () => {
     expect(
         within(navigation).getByRole('link', { name: 'Statistics' })
     ).toBeInTheDocument()
+
+    expect(
+        screen.getByRole('main')
+    ).toBeInTheDocument()
 })
 
 test('shows not found for an invalid catch id', () => {

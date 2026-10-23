@@ -176,7 +176,7 @@ function CatchLogPage() {
 
     return (
         <UnitContext value={unit}>
-            <section id="center">
+            <main id="center">
                 <Link to="/" style={{ textDecoration: 'none' }}><h1>Catch Log</h1></Link>
                 <Link to="/stats">Statistics</Link>
 
@@ -235,7 +235,7 @@ function CatchLogPage() {
                 onCancelEdit={handleCancelEdit}
                 fishInputRef={fishInputRef}
                 />
-            </section>
+            </main>
         </UnitContext>
     )
 }

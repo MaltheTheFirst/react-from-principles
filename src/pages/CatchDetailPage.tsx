@@ -11,20 +11,20 @@ function CatchDetailPage() {
 
     if (!catchItem) {
         return (
-            <section id="center">
+            <main id="center">
                 <h1>Catch not found</h1>
                 <Link to="/">Back to Catch Log</Link>
-            </section>
+            </main>
         )
     }
 
     return (
-        <section id="center">
+        <main id="center">
             <h1>Catch Details</h1>
             <p>Catch ID: {id}</p>
             <p>{catchItem.fish}</p>
             <p>Length: {catchItem.length}</p>
-        </section>
+        </main>
     )
 }
 

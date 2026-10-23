@@ -5,22 +5,22 @@ function StatsPage() {
 
     if (loading) {
         return (
-            <section id="center">
+            <main id="center">
                 <p>Loading Species...</p>
-            </section>
+            </main>
         )
     }
 
     if (error) {
         return (
-            <section id="center">
+            <main id="center">
                 <p>{error}</p>
-            </section>
+            </main>
         )
     }
 
     return (
-        <section id="center">
+        <main id="center">
             <h1>Catch Statistics</h1>
             <p>Stats page</p>
 
@@ -31,7 +31,7 @@ function StatsPage() {
                     </li>
                 ))}
             </ul>
-        </section>
+        </main>
     )
 }
 
