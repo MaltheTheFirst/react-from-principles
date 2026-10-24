@@ -11,11 +11,12 @@ function CatchLogPage() {
     const { 
 			catches,
 			formState, 
-			dispatch, 
 			handleCancelEdit,
 			handleEdit,
 			handleDelete,
 			handleSubmit,
+			handleFishChange,
+			handleLengthChange,
 			fishInputRef, 
 			lengthInputRef,
 			search,
@@ -82,17 +83,8 @@ function CatchLogPage() {
                 fish={formState.fish}
                 length={formState.length}
                 editingId={formState.editingId}
-                onFishChange={(value) => {
-                    dispatch({
-                        type: "fishChanged",
-                        value
-                    }
-                )}}
-                onLengthChange={(value) =>
-                    dispatch({
-                        type: "lengthChanged",
-                        value
-                    })}
+                onFishChange={handleFishChange}
+                onLengthChange={handleLengthChange}
                 onSubmit={handleSubmit}
                 onCancelEdit={handleCancelEdit}
                 fishInputRef={fishInputRef}

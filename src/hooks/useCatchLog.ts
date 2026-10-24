@@ -233,6 +233,20 @@ export function useCatchLog() {
         dispatch({ type: "reset" })
 		}
 
+    function handleFishChange(value: string) {
+        dispatch({
+            type: "fishChanged",
+            value
+        })
+    }
+
+    function handleLengthChange(value: string) {
+        dispatch({
+          type: "lengthChanged",
+          value
+        })
+    }
+
     return {
         catches,
         setCatches,
@@ -242,6 +256,8 @@ export function useCatchLog() {
         handleEdit,
         handleDelete,
         handleSubmit,
+        handleFishChange,
+        handleLengthChange,
         fishInputRef,
         lengthInputRef,
         search,
