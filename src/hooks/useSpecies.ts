@@ -37,7 +37,7 @@ export function useSpecies() {
             }
 
             return () => {
-                controller.abort
+                controller.abort()
             }
         }
 

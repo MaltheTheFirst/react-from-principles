@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, within } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import App from '../App'
-import { CatchProvider } from '../context/CatchContext'
+import { CatchProvider } from '../context/CatchProvider'
 
 beforeEach(() => {
     localStorage.clear()
